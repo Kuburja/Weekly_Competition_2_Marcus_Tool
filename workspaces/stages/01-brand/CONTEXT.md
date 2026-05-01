@@ -42,3 +42,5 @@ Define Marcus's visual identity and voice rules through interactive refinement.
 | Visual identity | `../../brand-vault/visual-identity.md` | Finalized colors and fonts |
 | Voice rules | `../../brand-vault/voice-rules.md` | Finalized voice patterns with examples |
 | Completion marker | `output/brand-complete.md` | One-line confirmation that brand-vault is populated |
+
+

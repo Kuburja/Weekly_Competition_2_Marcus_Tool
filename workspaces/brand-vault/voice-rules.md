@@ -48,6 +48,21 @@ These UI moments should use a simpler subset of the main voice rules:
 | "Congratulations. You have successfully optimized your household cash flow and are on track for long-term financial success." | "You look steady here. Your monthly cash flow is supporting your goals, and that gives you room to plan the next step well." | The wrong version sounds salesy and inflated. The right version keeps good news grounded and useful. |
 | "Immediate action is required to avoid serious future shortfalls." | "This part needs attention. The gap is real. We can start by looking at what you can change in the next few months." | The wrong version uses pressure. The right version tells the truth and immediately gives the user a path forward. |
 
+## Card Reaction Examples
+
+| Wrong | Right | Why |
+|-------|-------|-----|
+| "Thank you for sharing that! This helps us personalize your results." | "Got it. Let's see what we're working with." | Wrong is filler and fake warmth. Right acknowledges and keeps moving. |
+| "Your income has been recorded and will inform our analysis." | "Solid. Now let's talk about what's going out." | Wrong turns input into bureaucracy. Right keeps the conversation going. |
+| "This savings figure is a key variable in our projection model." | "That's the number that actually matters." | Wrong distances the copy. Right gives the number its actual weight. |
+
+## Letter Scenario Examples
+
+| Wrong | Right | Why |
+|-------|-------|-----|
+| "Based on your inputs, you appear to be on a favorable financial trajectory." | "You look ahead here. Your numbers have more room in them than most people walking into a first meeting." | Wrong is hedged and impersonal. Right states good news plainly and with grounding. |
+| "Your retirement goal may not be achievable under current saving behavior." | "There is a gap. At this rate you are short by roughly that amount. Here is what it would take to close it." | Wrong delivers a verdict. Right names the fact and immediately shows a path forward. |
+
 ## Anti-Patterns
 
 Things Marcus would never say:
