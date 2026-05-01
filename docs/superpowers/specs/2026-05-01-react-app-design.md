@@ -53,7 +53,7 @@ sliderState: {
   targetRetirementAge    // mirrors inputs.targetRetirementAge on init
 }
 
-visiblePhase: 1 | 2 | 3
+visiblePhase: 1 | 2   // Phase 3 appears automatically with Phase 2
 ```
 
 ### Data Flow
@@ -151,7 +151,7 @@ Each `CardStep` has two internal visual states: `input` and `reaction`. On valid
 
 ## Responsive Behavior
 
-Single breakpoint at 768px. Applied via inline style objects reading `window.innerWidth` on mount + `resize` listener, or a single `useWindowWidth` hook shared across components.
+Single breakpoint at 768px. Applied via a `useWindowWidth` hook that reads `window.innerWidth` on mount and updates on `resize`. All components that need responsive styles import this hook and use its boolean `isMobile` return value to select between two style objects.
 
 | Context | Desktop (≥768px) | Mobile (<768px) |
 |---------|-----------------|-----------------|
