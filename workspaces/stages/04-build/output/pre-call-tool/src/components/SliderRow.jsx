@@ -50,7 +50,7 @@ function SliderRow({
   value,
   valueText,
 }) {
-  const percent = ((value - min) / (max - min)) * 100;
+  const percent = max === min ? 100 : ((value - min) / (max - min)) * 100;
 
   return (
     <div style={styles.card}>
@@ -103,6 +103,7 @@ const styles = {
   topRow: {
     display: 'flex',
     alignItems: 'flex-start',
+    flexWrap: 'wrap',
     gap: '12px',
   },
   iconCircle: {
@@ -116,7 +117,8 @@ const styles = {
     justifyContent: 'center',
   },
   textBlock: {
-    flex: 1,
+    flex: '1 1 240px',
+    minWidth: 0,
     display: 'flex',
     flexDirection: 'column',
     gap: '4px',
@@ -125,7 +127,7 @@ const styles = {
     margin: 0,
     color: COLOR_PRIMARY,
     fontFamily: FONT_HEADING,
-    fontSize: '22px',
+    fontSize: 'clamp(20px, 2.2vw, 22px)',
     fontWeight: 500,
     lineHeight: 1.15,
     cursor: 'pointer',
@@ -151,6 +153,7 @@ const styles = {
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
+    marginLeft: 'auto',
   },
   sliderArea: {
     marginTop: '16px',

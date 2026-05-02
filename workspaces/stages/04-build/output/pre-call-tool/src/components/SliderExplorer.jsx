@@ -109,7 +109,7 @@ const styles = {
   panel: {
     backgroundColor: COLOR_SURFACE,
     border: `1px solid ${COLOR_SECONDARY}`,
-    padding: '40px 36px 36px',
+    padding: 'clamp(28px, 4vw, 40px) clamp(20px, 4vw, 36px) clamp(28px, 4vw, 36px)',
   },
   mobilePanel: {
     backgroundColor: COLOR_SURFACE,
@@ -124,7 +124,7 @@ const styles = {
     margin: 0,
     color: COLOR_PRIMARY,
     fontFamily: FONT_HEADING,
-    fontSize: '48px',
+    fontSize: 'clamp(40px, 5vw, 48px)',
     lineHeight: 0.95,
   },
   mobileHeading: {
@@ -138,7 +138,7 @@ const styles = {
     margin: 0,
     color: COLOR_TEXT_SECONDARY,
     fontFamily: FONT_BODY,
-    fontSize: '18px',
+    fontSize: 'clamp(16px, 2vw, 18px)',
     lineHeight: 1.6,
   },
   mobileSubhead: {
@@ -157,7 +157,7 @@ const styles = {
     margin: '28px 0 0',
     color: COLOR_TEXT,
     fontFamily: FONT_BODY,
-    fontSize: '18px',
+    fontSize: 'clamp(16px, 2vw, 18px)',
     lineHeight: 1.6,
   },
   mobileContext: {
@@ -174,7 +174,7 @@ const styles = {
     marginTop: '36px',
   },
   button: {
-    width: '320px',
+    width: 'min(100%, 320px)',
     border: 'none',
     backgroundColor: COLOR_PRIMARY,
     color: COLOR_SURFACE,

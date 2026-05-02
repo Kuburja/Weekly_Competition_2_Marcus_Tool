@@ -184,6 +184,31 @@ describe('TheLetter', () => {
     ).toBeTruthy();
   });
 
+  it('uses adaptive stat columns so the summary cards can resize with the available width', () => {
+    const inputs = {
+      currentAge: 40,
+      income: 180000,
+      annualExpenses: 90000,
+      currentSavings: 100000,
+      monthlySavings: 1500,
+      targetRetirementAge: 65,
+    };
+
+    render(
+      <TheLetter
+        inputs={inputs}
+        sliderState={{
+          monthlySavings: 1500,
+          targetRetirementAge: 65,
+        }}
+      />,
+    );
+
+    const statsGrid = screen.getByText('Projected savings').parentElement?.parentElement;
+
+    expect(statsGrid?.style.gridTemplateColumns).toContain('minmax');
+  });
+
   it('keeps a slot highlighted for 600ms from its most recent change', async () => {
     const inputs = {
       currentAge: 40,

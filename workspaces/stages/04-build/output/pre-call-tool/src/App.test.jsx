@@ -79,6 +79,21 @@ describe('App Phase 1 flow', () => {
     );
   });
 
+  it('keeps the desktop result view in one centered responsive column', async () => {
+    render(<App />);
+
+    await completePhaseOne();
+
+    const phaseTwoSection = screen
+      .getByText('Adjust Your Path')
+      .closest('section')
+      ?.parentElement?.parentElement;
+
+    expect(phaseTwoSection?.style.display).toBe('grid');
+    expect(phaseTwoSection?.style.maxWidth).toBe('980px');
+    expect(phaseTwoSection?.style.margin).toBe('0px auto');
+  });
+
   it('collects the five inputs, enters phase 2, and resets back to a blank first question', async () => {
     render(<App />);
 

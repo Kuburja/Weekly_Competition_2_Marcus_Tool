@@ -184,14 +184,7 @@ function TheLetter({ inputs, isMobile, sliderState }) {
       </header>
 
       <div
-        style={
-          isMobile
-            ? styles.mobileStatsGrid
-            : {
-                ...styles.statsGrid,
-                gridTemplateColumns: reactiveCalculation.gap > 0 ? 'repeat(3, 1fr)' : 'repeat(2, 1fr)',
-              }
-        }
+        style={isMobile ? styles.mobileStatsGrid : styles.statsGrid}
       >
         <StatCard label="Projected savings" value={projectedSavings} isMobile={isMobile} />
         <StatCard label="Retirement target" value={retirementTarget} isMobile={isMobile} />
@@ -235,7 +228,7 @@ const styles = {
     backgroundColor: C.cardBg,
     border: `1px solid ${C.borderSoft}`,
     borderRadius: '10px',
-    padding: '48px 56px 36px',
+    padding: 'clamp(30px, 4vw, 48px) clamp(22px, 5vw, 56px) 36px',
     boxShadow: '0 12px 32px rgba(60, 45, 30, 0.12)',
   },
   mobileCard: {
@@ -250,6 +243,8 @@ const styles = {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: '16px',
     marginBottom: '28px',
     paddingBottom: '24px',
     borderBottom: `1px solid ${C.accentLine}`,
@@ -264,6 +259,7 @@ const styles = {
     paddingBottom: '12px',
   },
   titleText: {
+    flex: '1 1 240px',
     fontSize: '16px',
     fontWeight: '700',
     letterSpacing: '0.22em',
@@ -288,10 +284,11 @@ const styles = {
     letterSpacing: '0.16em',
     textTransform: 'uppercase',
     fontFamily: FONT_SANS,
+    whiteSpace: 'nowrap',
   },
   statsGrid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(3, 1fr)',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
     gap: '18px',
     marginBottom: '42px',
   },
@@ -323,9 +320,9 @@ const styles = {
   },
   statValue: {
     fontFamily: FONT_SANS,
-    fontSize: '44px',
+    fontSize: 'clamp(32px, 4vw, 44px)',
     fontWeight: '600',
-    lineHeight: '1',
+    lineHeight: '1.05',
     color: C.textMain,
     letterSpacing: '-0.03em',
     fontVariantNumeric: 'tabular-nums',
@@ -367,7 +364,7 @@ const styles = {
     marginTop: '10px',
   },
   sectionBody: {
-    fontSize: '20px',
+    fontSize: 'clamp(18px, 2.1vw, 20px)',
     lineHeight: '1.65',
     color: C.textMain,
     maxWidth: '900px',
@@ -393,7 +390,7 @@ const styles = {
   },
   signatureText: {
     fontFamily: FONT_SCRIPT,
-    fontSize: '64px',
+    fontSize: 'clamp(52px, 6vw, 64px)',
     color: C.signature,
     lineHeight: '1',
   },

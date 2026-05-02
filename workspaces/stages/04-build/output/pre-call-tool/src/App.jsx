@@ -90,14 +90,14 @@ function App() {
               transition={{ duration: 0.28, ease: 'easeOut' }}
               style={isMobile ? styles.phaseTwo : styles.phaseTwoDesktop}
             >
-              <div style={isMobile ? undefined : styles.letterCol}>
+              <div style={styles.resultBlock}>
                 <TheLetter
                   inputs={inputs}
                   isMobile={isMobile}
                   sliderState={sliderState}
                 />
               </div>
-              <div style={isMobile ? undefined : styles.sliderCol}>
+              <div style={styles.resultBlock}>
                 <SliderExplorer
                   inputs={inputs}
                   isMobile={isMobile}
@@ -126,24 +126,20 @@ const styles = {
   },
   phaseTwo: {
     width: '100%',
+    display: 'grid',
+    gap: '24px',
   },
   phaseTwoDesktop: {
     width: '100%',
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: '48px',
-    padding: '48px 40px',
+    maxWidth: '980px',
+    display: 'grid',
+    gap: '32px',
+    padding: '48px 40px 64px',
+    margin: '0 auto',
   },
-  letterCol: {
-    flex: '1 1 0',
+  resultBlock: {
+    width: '100%',
     minWidth: 0,
-  },
-  sliderCol: {
-    flex: '1 1 0',
-    minWidth: 0,
-    position: 'sticky',
-    top: '24px',
   },
 };
 
