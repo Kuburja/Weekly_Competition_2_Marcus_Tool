@@ -130,6 +130,49 @@ describe('App Phase 1 flow', () => {
     expect(currentAgeInput.getAttribute('value')).toBe('');
     expect(currentAgeInput.getAttribute('placeholder')).toBe('e.g. 38');
   });
+
+  it('shows a fixed mobile scroll cue in the results view only', async () => {
+    setViewportWidth(390);
+
+    render(<App />);
+
+    expect(screen.queryByTestId('mobile-scroll-cue')).toBeNull();
+
+    await completePhaseOne();
+
+    const letterSection = screen.getByTestId('letter-section');
+    const sliderSection = screen.getByTestId('slider-section');
+
+    Object.defineProperty(letterSection, 'getBoundingClientRect', {
+      configurable: true,
+      value: () => ({
+        top: 0,
+        bottom: 920,
+        left: 0,
+        right: 390,
+        width: 390,
+        height: 920,
+      }),
+    });
+
+    Object.defineProperty(sliderSection, 'getBoundingClientRect', {
+      configurable: true,
+      value: () => ({
+        top: 960,
+        bottom: 1680,
+        left: 0,
+        right: 390,
+        width: 390,
+        height: 720,
+      }),
+    });
+
+    await act(async () => {
+      window.dispatchEvent(new Event('scroll'));
+    });
+
+    expect(screen.getByTestId('mobile-scroll-cue')).toBeTruthy();
+  });
 });
 
 function submitQuestion(label, value) {

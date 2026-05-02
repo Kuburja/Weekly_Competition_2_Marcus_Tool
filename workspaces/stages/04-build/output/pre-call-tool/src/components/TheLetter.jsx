@@ -447,11 +447,10 @@ function TheLetter({ inputs, isMobile, sliderState }) {
 const styles = {
   card: {
     width: '100%',
-    height: '100%',
     backgroundColor: C.cardBg,
     border: `1px solid ${C.borderSoft}`,
     borderRadius: '28px',
-    padding: 'clamp(30px, 4vw, 48px) clamp(22px, 5vw, 56px) 36px',
+    padding: 'clamp(26px, 3.4vw, 42px) clamp(22px, 5vw, 56px) 30px',
     boxShadow: '0 12px 32px rgba(60, 45, 30, 0.12)',
     boxSizing: 'border-box',
   },
@@ -469,8 +468,8 @@ const styles = {
     alignItems: 'center',
     flexWrap: 'wrap',
     gap: '16px',
-    marginBottom: '28px',
-    paddingBottom: '24px',
+    marginBottom: '24px',
+    paddingBottom: '20px',
     borderBottom: `1px solid ${C.accentLine}`,
   },
   mobileHeader: {
@@ -513,11 +512,13 @@ const styles = {
   statsGrid: {
     display: 'grid',
     gap: '14px',
-    marginBottom: '42px',
+    marginTop: '26px',
+    marginBottom: '34px',
   },
   mobileStatsGrid: {
     display: 'grid',
     gap: '10px',
+    marginTop: '20px',
     marginBottom: '34px',
   },
   statCard: {
@@ -568,7 +569,7 @@ const styles = {
     whiteSpace: 'nowrap',
   },
   section: {
-    marginBottom: '28px',
+    marginBottom: '24px',
   },
   sectionLabelText: {
     fontSize: '15px',
@@ -610,11 +611,11 @@ const styles = {
   divider: {
     border: 'none',
     borderTop: `1px dashed ${C.dividerDashed}`,
-    margin: '28px 0',
+    margin: '24px 0',
   },
   signatureArea: {
-    marginTop: '34px',
-    paddingTop: '22px',
+    marginTop: '28px',
+    paddingTop: '18px',
     borderTop: `1px solid ${C.accentLine}`,
   },
   signatureText: {

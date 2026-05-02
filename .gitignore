@@ -1,1 +1,7 @@
 .worktrees/
+*.md
+*.pdf
+node_modules/
+dist/
+*.log
+*.pid

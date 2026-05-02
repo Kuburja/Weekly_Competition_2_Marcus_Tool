@@ -45,7 +45,7 @@ export function getProgressPercent(calculation) {
   }
 
   const percent = (calculation.totalProjectedRetirementSavings / calculation.retirementTarget) * 100;
-  return Math.max(0, Math.min(999, Math.round(percent)));
+  return Math.max(0, Math.min(100, Math.round(percent)));
 }
 
 export function getOutlookTone(calculation) {

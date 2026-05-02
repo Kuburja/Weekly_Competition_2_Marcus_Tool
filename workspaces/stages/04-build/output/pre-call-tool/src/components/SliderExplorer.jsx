@@ -105,11 +105,12 @@ function LeafBadge() {
   );
 }
 
-function ProgressRing({ percent }) {
+function ProgressRing({ gap, percent }) {
   const radius = 86;
   const circumference = 2 * Math.PI * radius;
   const boundedPercent = Math.max(0, Math.min(100, percent));
   const dashOffset = circumference - (boundedPercent / 100) * circumference;
+  const isAhead = gap < 0;
 
   return (
     <div style={styles.ringWrap}>
@@ -139,8 +140,17 @@ function ProgressRing({ percent }) {
         />
       </svg>
       <div style={styles.ringLabel}>
-        <span style={styles.ringValue}>{formatPercentWhole(percent)}</span>
-        <span style={styles.ringCaption}>of target</span>
+        {isAhead ? (
+          <>
+            <span style={styles.ringCaption}>Ahead by</span>
+            <span style={styles.ringValueCompact}>{formatCurrencyWhole(Math.abs(gap))}</span>
+          </>
+        ) : (
+          <>
+            <span style={styles.ringValue}>{formatPercentWhole(percent)}</span>
+            <span style={styles.ringCaption}>of target</span>
+          </>
+        )}
       </div>
     </div>
   );
@@ -219,123 +229,93 @@ function SliderExplorer({ inputs, isMobile, onSliderChange, sliderState }) {
             {SLIDER_COPY.subhead}
           </p>
         </div>
-
-        <div style={isMobile ? styles.mobileLayout : styles.layout}>
-          <div style={isMobile ? styles.sliderStack : styles.slidersRow}>
-            <SliderRow
-              fieldId="monthly-savings-slider"
-              helperText={SLIDER_COPY.monthlyHelper}
-              iconType="savings"
-              label={SLIDER_COPY.monthlyLabel}
-              max={monthlySavingsMax}
-              maxLabel={formatMonthlySavingsShort(monthlySavingsMax)}
-              min={0}
-              minLabel="$0"
-              onChange={(value) => onSliderChange('monthlySavings', value)}
-              shortValueText={formatMonthlySavingsShort(sliderState.monthlySavings)}
-              step={100}
-              value={sliderState.monthlySavings}
-              valueText={formatMonthlySavingsValue(sliderState.monthlySavings)}
-            />
-            <SliderRow
-              fieldId="retirement-age-slider"
-              helperText={SLIDER_COPY.retirementAgeHelper}
-              iconType="retirement"
-              label={SLIDER_COPY.retirementAgeLabel}
-              max={80}
-              maxLabel="80"
-              min={inputs.currentAge + 1}
-              minLabel={formatRetirementAgeShort(inputs.currentAge + 1)}
-              onChange={(value) => onSliderChange('targetRetirementAge', value)}
-              shortValueText={formatRetirementAgeShort(sliderState.targetRetirementAge)}
-              step={1}
-              value={sliderState.targetRetirementAge}
-              valueText={formatRetirementAgeValue(sliderState.targetRetirementAge)}
-            />
+        {isMobile ? (
+          <div style={styles.mobileLayout}>
+            <div style={styles.ringWrapper}>
+              <p style={styles.ringTitle}>Retirement progress</p>
+              <ProgressRing gap={calculation.gap} percent={progressPercent} />
+            </div>
+            <div style={styles.sliderStack}>
+              <SliderRow
+                fieldId="monthly-savings-slider"
+                helperText={SLIDER_COPY.monthlyHelper}
+                iconType="savings"
+                label={SLIDER_COPY.monthlyLabel}
+                max={monthlySavingsMax}
+                maxLabel={formatMonthlySavingsShort(monthlySavingsMax)}
+                min={0}
+                minLabel="$0"
+                onChange={(value) => onSliderChange('monthlySavings', value)}
+                shortValueText={formatMonthlySavingsShort(sliderState.monthlySavings)}
+                step={100}
+                value={sliderState.monthlySavings}
+                valueText={formatMonthlySavingsValue(sliderState.monthlySavings)}
+              />
+              <SliderRow
+                fieldId="retirement-age-slider"
+                helperText={SLIDER_COPY.retirementAgeHelper}
+                iconType="retirement"
+                label={SLIDER_COPY.retirementAgeLabel}
+                max={80}
+                maxLabel="80"
+                min={inputs.currentAge + 1}
+                minLabel={formatRetirementAgeShort(inputs.currentAge + 1)}
+                onChange={(value) => onSliderChange('targetRetirementAge', value)}
+                shortValueText={formatRetirementAgeShort(sliderState.targetRetirementAge)}
+                step={1}
+                value={sliderState.targetRetirementAge}
+                valueText={formatRetirementAgeValue(sliderState.targetRetirementAge)}
+              />
+            </div>
+            <p style={styles.mobileContext}>
+              <span style={styles.contextLead}>Tip:</span> {context}
+            </p>
           </div>
-
-          <p style={isMobile ? styles.mobileContext : styles.context}>
-            <span style={styles.contextLead}>Tip:</span> {context}
-          </p>
-
-          <div style={styles.outlookColumn}>
-            <div style={styles.outlookCard}>
-              <div style={styles.outlookHeader}>
-                <h3 style={styles.outlookHeading}>Your retirement outlook</h3>
-                <div style={{ ...styles.statusBadge, ...badgeStyle }}>
-                  <span style={styles.statusDot} />
-                  <span>{outlookTone.label}</span>
-                </div>
+        ) : (
+          <div style={styles.layout}>
+            <div style={styles.slidersAndTip}>
+              <div style={styles.slidersRow}>
+                <SliderRow
+                  fieldId="monthly-savings-slider"
+                  helperText={SLIDER_COPY.monthlyHelper}
+                  iconType="savings"
+                  label={SLIDER_COPY.monthlyLabel}
+                  max={monthlySavingsMax}
+                  maxLabel={formatMonthlySavingsShort(monthlySavingsMax)}
+                  min={0}
+                  minLabel="$0"
+                  onChange={(value) => onSliderChange('monthlySavings', value)}
+                  shortValueText={formatMonthlySavingsShort(sliderState.monthlySavings)}
+                  step={100}
+                  value={sliderState.monthlySavings}
+                  valueText={formatMonthlySavingsValue(sliderState.monthlySavings)}
+                />
+                <SliderRow
+                  fieldId="retirement-age-slider"
+                  helperText={SLIDER_COPY.retirementAgeHelper}
+                  iconType="retirement"
+                  label={SLIDER_COPY.retirementAgeLabel}
+                  max={80}
+                  maxLabel="80"
+                  min={inputs.currentAge + 1}
+                  minLabel={formatRetirementAgeShort(inputs.currentAge + 1)}
+                  onChange={(value) => onSliderChange('targetRetirementAge', value)}
+                  shortValueText={formatRetirementAgeShort(sliderState.targetRetirementAge)}
+                  step={1}
+                  value={sliderState.targetRetirementAge}
+                  valueText={formatRetirementAgeValue(sliderState.targetRetirementAge)}
+                />
               </div>
-
-              <div style={isMobile ? styles.mobileOutlookMetrics : styles.outlookMetrics}>
-                <ProgressRing percent={progressPercent} />
-
-                <div style={styles.metricList}>
-                  <div style={styles.metricRow}>
-                    <div>
-                      <p style={styles.metricLabel}>Projected savings</p>
-                      <p style={styles.metricValue}>
-                        {formatCurrencyWhole(calculation.totalProjectedRetirementSavings)}
-                      </p>
-                    </div>
-                    <div
-                      style={{
-                        ...styles.metricDelta,
-                        ...(projectedChange >= 0 ? styles.positiveDelta : styles.negativeDelta),
-                      }}
-                    >
-                      <span>{getDeltaLabel(projectedChange)}</span>
-                      <span style={styles.metricDeltaCaption}>projected</span>
-                    </div>
-                  </div>
-
-                  <div style={styles.metricDivider} />
-
-                  <div style={styles.metricRow}>
-                    <div>
-                      <p style={styles.metricLabel}>Retirement target</p>
-                      <p style={styles.metricValue}>
-                        {formatCurrencyWhole(calculation.retirementTarget)}
-                      </p>
-                    </div>
-                    <div style={styles.metricDash}>-</div>
-                  </div>
-
-                  <div style={styles.metricDivider} />
-
-                  <div style={styles.metricRow}>
-                    <div>
-                      <p style={styles.metricLabel}>Gap</p>
-                      <p
-                        style={{
-                          ...styles.metricValue,
-                          color: hasPositiveGap ? COLOR_ACCENT : COLOR_PRIMARY,
-                        }}
-                      >
-                        {hasPositiveGap
-                          ? formatCurrencyWhole(calculation.gap)
-                          : formatCurrencyWhole(0)}
-                      </p>
-                    </div>
-                    <div
-                      style={{
-                        ...styles.metricDelta,
-                        ...(hasPositiveGap ? styles.negativeDelta : styles.positiveDelta),
-                      }}
-                    >
-                      <span>{hasPositiveGap ? formatCurrencyWhole(calculation.gap) : 'Closed'}</span>
-                      <span style={styles.metricDeltaCaption}>
-                        {hasPositiveGap ? 'gap' : 'target met'}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
+              <p style={styles.context}>
+                <span style={styles.contextLead}>Tip:</span> {context}
+              </p>
+            </div>
+            <div style={styles.ringWrapper}>
+              <p style={styles.ringTitle}>Retirement progress</p>
+              <ProgressRing gap={calculation.gap} percent={progressPercent} />
             </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );
@@ -344,7 +324,6 @@ function SliderExplorer({ inputs, isMobile, onSliderChange, sliderState }) {
 const styles = {
   section: {
     width: '100%',
-    height: '100%',
     display: 'flex',
     flexDirection: 'column',
   },
@@ -354,11 +333,13 @@ const styles = {
     borderTop: `1px solid ${COLOR_SECONDARY}`,
   },
   panel: {
-    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
     background: `radial-gradient(circle at top left, #fffaf3 0%, ${COLOR_SURFACE} 55%, #fffaf1 100%)`,
     border: `1px solid ${BORDER_SOFT}`,
     borderRadius: '28px',
-    padding: '30px clamp(24px, 3.4vw, 40px) 34px',
+    padding: '26px clamp(24px, 3.2vw, 38px) 28px',
     boxShadow: PANEL_SHADOW,
   },
   mobilePanel: {
@@ -409,13 +390,30 @@ const styles = {
     lineHeight: 1.55,
   },
   layout: {
+    display: 'flex',
+    alignItems: 'stretch',
+    gap: '28px',
+    marginTop: '72px',
+  },
+  slidersAndTip: {
+    flex: 1,
     display: 'grid',
     gap: '16px',
-    marginTop: '20px',
+    alignContent: 'start',
   },
   slidersRow: {
     display: 'grid',
     gap: '18px',
+  },
+  sliderRingRow: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '32px',
+  },
+  mobileSliderRingRow: {
+    display: 'grid',
+    gap: '22px',
+    justifyItems: 'center',
   },
   mobileLayout: {
     display: 'grid',
@@ -528,6 +526,13 @@ const styles = {
     fontSize: '38px',
     lineHeight: 0.9,
   },
+  ringValueCompact: {
+    color: COLOR_PRIMARY,
+    fontFamily: FONT_HEADING,
+    fontSize: '26px',
+    lineHeight: 1,
+    textAlign: 'center',
+  },
   ringCaption: {
     color: COLOR_TEXT_SECONDARY,
     fontFamily: FONT_BODY,
@@ -596,6 +601,25 @@ const styles = {
     fontSize: '28px',
     lineHeight: 1,
     paddingRight: '12px',
+  },
+  ringWrapper: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '8px',
+    flexShrink: 0,
+    alignSelf: 'stretch',
+  },
+  ringTitle: {
+    margin: 0,
+    color: COLOR_TEXT_SECONDARY,
+    fontFamily: FONT_BODY,
+    fontSize: '13px',
+    fontWeight: 600,
+    letterSpacing: '0.04em',
+    textTransform: 'uppercase',
+    textAlign: 'center',
   },
   trendPanel: {
     display: 'flex',

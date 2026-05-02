@@ -5,8 +5,9 @@ import { calculate } from '../calc';
 import {
   formatMonthlySavingsValue,
   formatRetirementAgeValue,
-  getOutlookTone,
   getMonthlySavingsMax,
+  getOutlookTone,
+  getProgressPercent,
   getSliderContext,
 } from './sliderExplorerUtils';
 
@@ -74,5 +75,15 @@ describe('sliderExplorerUtils', () => {
       label: 'Slightly Behind',
       tone: 'caution',
     });
+  });
+
+  it('caps displayed retirement progress at 100 percent once the target is exceeded', () => {
+    const aheadCalculation = calculate({
+      ...inputs,
+      currentSavings: 5_000_000,
+    });
+
+    expect(aheadCalculation.gap).toBeLessThan(0);
+    expect(getProgressPercent(aheadCalculation)).toBe(100);
   });
 });
