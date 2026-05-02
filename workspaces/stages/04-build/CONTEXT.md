@@ -10,7 +10,7 @@ Generate the complete React application from the spec, copy, brand, and calculat
 | Stage 02 output | `../02-content/output/pre-call-tool-copy.md` | Full file | All copy to render |
 | Brand vault | `../../brand-vault/visual-identity.md` | Full file | Colors, fonts for shared constants |
 | Reference | `../../shared/logic-spec.md` | Full file | Calculation formulas to implement |
-| Skills | `../../skills/*/SKILL.md` | Index, load rules as needed | React and frontend best practices |
+| Skills | `..\workspaces\skills\react-best-practices\SKILL.md` | Index, load rules as needed | React and frontend best practices |
 
 ## Process
 
