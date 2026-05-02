@@ -1,0 +1,288 @@
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Source+Sans+3:wght@400;500;600&display=swap');
+  body { background: #F6F1E8; }
+
+  .page-title { font-family:'Cormorant Garamond',serif; font-size:24px; color:#234736; margin-bottom:6px; }
+  .page-sub { font-family:'Source Sans 3',sans-serif; font-size:14px; color:#5F655E; margin-bottom:28px; }
+
+  .options { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+
+  .opt-card {
+    background: #FFFDFC;
+    border: 2px solid #A79E92;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .opt-card:hover { border-color: #234736; }
+  .opt-card.selected { border-color: #234736; box-shadow: 0 0 0 3px rgba(35,71,54,0.15); }
+
+  .opt-header {
+    background: #234736;
+    padding: 10px 14px;
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    color: #F6F1E8;
+  }
+  .opt-letter {
+    width: 24px; height: 24px; background: #C46F52; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Source Sans 3', sans-serif; font-size: 12px; font-weight: 600;
+    color: white; flex-shrink: 0;
+  }
+  .badge {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 10px; font-weight: 600;
+    padding: 2px 7px; border-radius: 10px;
+    text-transform: uppercase; letter-spacing: 0.04em;
+    margin-left: auto;
+  }
+  .badge-rec { background: #C46F52; color: white; }
+  .badge-alt { background: rgba(255,255,255,0.15); color: #F6F1E8; }
+
+  .opt-preview { padding: 14px; background: #F6F1E8; min-height: 240px; }
+  .opt-desc {
+    padding: 10px 14px 14px;
+    font-family: 'Source Sans 3', sans-serif; font-size: 12px;
+    color: #5F655E; line-height: 1.5;
+    border-top: 1px solid #EDE8DF;
+  }
+  .opt-desc strong { color: #1F2420; }
+
+  /* --- A: Stat cards --- */
+  .stat-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .stat-card {
+    background: #FFFDFC;
+    border: 1px solid #A79E92;
+    border-radius: 7px;
+    padding: 10px 10px 8px;
+  }
+  .stat-label {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 9px; text-transform: uppercase; letter-spacing: 0.05em;
+    color: #5F655E; margin-bottom: 4px;
+  }
+  .stat-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px; color: #234736; font-weight: 600;
+  }
+  .stat-value.behind { color: #C46F52; }
+  .stat-value.ahead { color: #234736; }
+  .stat-delta {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 10px; color: #A79E92; margin-top: 2px;
+  }
+  .stat-delta.positive { color: #234736; }
+
+  .slider-preview {
+    background: #FFFDFC; border: 1px solid #A79E92; border-radius: 7px;
+    padding: 10px; margin-top: 8px;
+  }
+  .slider-track {
+    height: 4px; background: #EDE8DF; border-radius: 2px;
+    margin: 6px 0 2px; position: relative;
+  }
+  .slider-fill {
+    height: 100%; background: #C46F52; border-radius: 2px;
+    width: 45%;
+  }
+  .slider-thumb {
+    width: 14px; height: 14px; background: #234736; border-radius: 50%;
+    position: absolute; top: -5px; left: 43%;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  }
+  .slider-row-label {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 10px; color: #5F655E;
+    display: flex; justify-content: space-between;
+  }
+
+  /* --- B: Before / After --- */
+  .ba-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .ba-col {
+    background: #FFFDFC; border: 1px solid #A79E92; border-radius: 7px; padding: 10px;
+  }
+  .ba-col.after { border-color: #234736; }
+  .ba-col-label {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 9px; text-transform: uppercase; letter-spacing: 0.05em;
+    color: #A79E92; margin-bottom: 8px;
+  }
+  .ba-col.after .ba-col-label { color: #234736; }
+  .ba-row {
+    margin-bottom: 7px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 10px; color: #5F655E;
+  }
+  .ba-val {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px; color: #234736; display: block;
+  }
+  .ba-val.worse { color: #C46F52; }
+  .ba-val.better { color: #234736; }
+
+  .arrow-divider {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; color: #C46F52;
+    margin-top: 40px;
+  }
+
+  /* --- C: Gap bar --- */
+  .gap-bar-wrap { margin-bottom: 12px; }
+  .gap-bar-labels {
+    display: flex; justify-content: space-between;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 10px; color: #5F655E; margin-bottom: 4px;
+  }
+  .gap-bar-track {
+    height: 16px; background: #EDE8DF; border-radius: 8px; overflow: hidden;
+    position: relative;
+  }
+  .gap-bar-fill {
+    height: 100%; background: #C46F52; width: 60%;
+    border-radius: 8px 0 0 8px;
+    display: flex; align-items: center; padding-left: 8px;
+    font-family: 'Source Sans 3', sans-serif; font-size: 9px;
+    font-weight: 600; color: white;
+  }
+  .gap-target-line {
+    position: absolute; right: 0; top: -3px; bottom: -3px;
+    width: 2px; background: #234736;
+  }
+  .gap-note {
+    font-family: 'Source Sans 3', sans-serif; font-size: 10px;
+    color: #5F655E; text-align: right; margin-top: 3px;
+  }
+  .gap-note strong { color: #C46F52; }
+
+  .key-nums { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 10px; }
+  .key-num {
+    text-align: center;
+    font-family: 'Cormorant Garamond', serif; font-size: 18px;
+    color: #234736;
+  }
+  .key-num-label {
+    font-family: 'Source Sans 3', sans-serif; font-size: 9px;
+    text-transform: uppercase; letter-spacing: 0.05em; color: #5F655E;
+    display: block; margin-top: 2px;
+  }
+</style>
+
+<p class="page-title">What should the sliders section actually show?</p>
+<p class="page-sub">Right now the sliders do nothing visible. Here are three options for what shifts as the user drags.</p>
+
+<div class="options">
+
+  <!-- A: Live stat cards -->
+  <div class="opt-card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="opt-header">
+      <div class="opt-letter">A</div>
+      Live Numbers
+      <span class="badge badge-alt">Clean</span>
+    </div>
+    <div class="opt-preview">
+      <div class="stat-cards">
+        <div class="stat-card">
+          <div class="stat-label">Projected savings</div>
+          <div class="stat-value ahead">$891k</div>
+          <div class="stat-delta positive">↑ $44k from your path</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Gap</div>
+          <div class="stat-value behind">$109k short</div>
+          <div class="stat-delta positive">↓ Better by $44k</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Still need / mo</div>
+          <div class="stat-value">$310</div>
+          <div class="stat-delta positive">↓ was $490/mo</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Years left</div>
+          <div class="stat-value ahead">27</div>
+          <div class="stat-delta">At age 65</div>
+        </div>
+      </div>
+      <div class="slider-preview">
+        <div class="slider-row-label"><span>Monthly savings</span><span style="color:#234736;font-weight:600">$800/mo</span></div>
+        <div class="slider-track"><div class="slider-fill"></div><div class="slider-thumb"></div></div>
+        <div class="slider-row-label" style="margin-top:10px"><span>Retire at age</span><span style="color:#234736;font-weight:600">65</span></div>
+        <div class="slider-track"><div class="slider-fill" style="width:60%"></div><div class="slider-thumb" style="left:58%"></div></div>
+      </div>
+    </div>
+    <div class="opt-desc"><strong>4 stat cards update in real time</strong> as sliders move — projected savings, gap, additional monthly savings needed, years left. Simple, number-focused.</div>
+  </div>
+
+  <!-- B: Before / After -->
+  <div class="opt-card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="opt-header">
+      <div class="opt-letter">B</div>
+      Before / After
+      <span class="badge badge-rec">Recommended</span>
+    </div>
+    <div class="opt-preview">
+      <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:6px;align-items:start">
+        <div class="ba-col">
+          <div class="ba-col-label">Your current path</div>
+          <div class="ba-row">Projected<div class="ba-val worse">$847k</div></div>
+          <div class="ba-row">Gap<div class="ba-val worse">$153k short</div></div>
+          <div class="ba-row">Need monthly<div class="ba-val worse">$490/mo more</div></div>
+        </div>
+        <div class="arrow-divider">→</div>
+        <div class="ba-col after">
+          <div class="ba-col-label">With adjustments</div>
+          <div class="ba-row">Projected<div class="ba-val better">$991k</div></div>
+          <div class="ba-row">Gap<div class="ba-val better">$9k short</div></div>
+          <div class="ba-row">Need monthly<div class="ba-val better">$25/mo more</div></div>
+        </div>
+      </div>
+      <div class="slider-preview" style="margin-top:10px">
+        <div class="slider-row-label"><span>Monthly savings</span><span style="color:#234736;font-weight:600">$900/mo</span></div>
+        <div class="slider-track"><div class="slider-fill" style="width:55%"></div><div class="slider-thumb" style="left:53%"></div></div>
+        <div class="slider-row-label" style="margin-top:10px"><span>Retire at age</span><span style="color:#234736;font-weight:600">67</span></div>
+        <div class="slider-track"><div class="slider-fill" style="width:70%"></div><div class="slider-thumb" style="left:68%"></div></div>
+      </div>
+    </div>
+    <div class="opt-desc"><strong>Two columns: locked baseline vs. adjusted.</strong> Right column updates as you drag. The delta is immediately obvious — user sees exactly what their changes bought them.</div>
+  </div>
+
+  <!-- C: Gap progress bar -->
+  <div class="opt-card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="opt-header">
+      <div class="opt-letter">C</div>
+      Gap Progress Bar
+      <span class="badge badge-alt">Visual</span>
+    </div>
+    <div class="opt-preview">
+      <div style="font-family:'Source Sans 3',sans-serif;font-size:11px;color:#5F655E;margin-bottom:10px;">Drag a slider to see this move.</div>
+      <div class="gap-bar-wrap">
+        <div class="gap-bar-labels"><span>$0</span><span>Target: $1,000k</span></div>
+        <div class="gap-bar-track">
+          <div class="gap-bar-fill">$600k</div>
+          <div class="gap-target-line"></div>
+        </div>
+        <div class="gap-note">You're <strong>$400k short</strong> of target</div>
+      </div>
+      <div style="font-family:'Source Sans 3',sans-serif;font-size:10px;color:#5F655E;margin:4px 0 2px;">After adjustments →</div>
+      <div class="gap-bar-wrap">
+        <div class="gap-bar-track" style="height:16px">
+          <div class="gap-bar-fill" style="width:92%;background:#234736">$920k</div>
+          <div class="gap-target-line"></div>
+        </div>
+        <div class="gap-note" style="color:#234736"><strong>$80k short</strong> — almost there</div>
+      </div>
+      <div class="key-nums">
+        <div class="key-num">$920k<span class="key-num-label">Projected</span></div>
+        <div class="key-num">$80k<span class="key-num-label">Still short</span></div>
+      </div>
+      <div class="slider-preview" style="margin-top:10px">
+        <div class="slider-row-label"><span>Monthly savings</span><span style="color:#234736;font-weight:600">$800/mo</span></div>
+        <div class="slider-track"><div class="slider-fill"></div><div class="slider-thumb"></div></div>
+      </div>
+    </div>
+    <div class="opt-desc"><strong>A horizontal bar fills toward the retirement target</strong> as sliders move — more intuitive for visual thinkers. Less precise on numbers but the direction is instantly clear.</div>
+  </div>
+
+</div>

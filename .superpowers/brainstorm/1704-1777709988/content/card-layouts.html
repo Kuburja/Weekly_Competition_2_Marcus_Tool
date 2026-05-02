@@ -1,0 +1,370 @@
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Source+Sans+3:wght@400;600&display=swap');
+
+  .layout-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 24px;
+  }
+
+  .layout-option {
+    background: #fff;
+    border: 2px solid #e8e4de;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    overflow: hidden;
+  }
+
+  .layout-option.selected {
+    border-color: #234736;
+    box-shadow: 0 0 0 3px rgba(35,71,54,0.15);
+  }
+
+  .layout-option:hover {
+    border-color: #A79E92;
+  }
+
+  .layout-preview {
+    background: #F6F1E8;
+    padding: 24px 20px;
+    min-height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .layout-meta {
+    padding: 14px 16px 16px;
+    border-top: 1px solid #e8e4de;
+  }
+
+  .layout-name {
+    margin: 0 0 4px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #234736;
+  }
+
+  .layout-desc {
+    margin: 0;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13px;
+    color: #5F655E;
+    line-height: 1.45;
+  }
+
+  /* OPTION A — Minimal / floating */
+  .preview-a {
+    width: 100%;
+    display: grid;
+    gap: 10px;
+  }
+
+  .pa-question {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: #234736;
+    line-height: 1.1;
+    margin: 0;
+  }
+
+  .pa-input {
+    border: none;
+    border-bottom: 1.5px solid #A79E92;
+    background: transparent;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 18px;
+    color: #2C2C2B;
+    padding: 6px 0;
+    width: 100%;
+    outline: none;
+  }
+
+  .pa-progress {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 4px;
+  }
+
+  .pa-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #A79E92;
+  }
+
+  .pa-dot.done { background: #C46F52; }
+  .pa-dot.active { background: #234736; }
+
+  .pa-btn {
+    display: inline-block;
+    background: #234736;
+    color: #FFFDFC;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border: none;
+    cursor: pointer;
+    width: fit-content;
+    margin-top: 2px;
+  }
+
+  /* OPTION B — compact card */
+  .preview-b {
+    width: 100%;
+  }
+
+  .pb-card {
+    background: #FFFDFC;
+    border: 1px solid #A79E92;
+    padding: 18px 16px 16px;
+    display: grid;
+    gap: 10px;
+  }
+
+  .pb-progress {
+    display: flex;
+    gap: 5px;
+  }
+
+  .pb-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #A79E92;
+  }
+
+  .pb-dot.done { background: #C46F52; }
+  .pb-dot.active { background: #234736; }
+
+  .pb-question {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: #234736;
+    line-height: 1.1;
+    margin: 0;
+  }
+
+  .pb-input {
+    border: 1px solid #A79E92;
+    background: transparent;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 16px;
+    color: #2C2C2B;
+    padding: 8px 10px;
+    width: 100%;
+    outline: none;
+  }
+
+  .pb-btn {
+    background: #234736;
+    color: #FFFDFC;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 14px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+  }
+
+  /* OPTION C — chat/conversational */
+  .preview-c {
+    width: 100%;
+    display: grid;
+    gap: 10px;
+  }
+
+  .pc-message {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+
+  .pc-avatar {
+    width: 26px;
+    height: 26px;
+    background: #234736;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #FFFDFC;
+    margin-top: 1px;
+  }
+
+  .pc-bubble {
+    background: #FFFDFC;
+    border: 1px solid #e8e4de;
+    padding: 10px 12px;
+    flex: 1;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 14px;
+    color: #2C2C2B;
+    line-height: 1.45;
+  }
+
+  .pc-question {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #234736;
+    margin: 0;
+    line-height: 1.15;
+  }
+
+  .pc-reply-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .pc-input {
+    flex: 1;
+    border: 1px solid #A79E92;
+    background: #FFFDFC;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 14px;
+    color: #2C2C2B;
+    padding: 8px 10px;
+    outline: none;
+  }
+
+  .pc-send {
+    background: #234736;
+    color: #FFFDFC;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 12px;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .pc-prev {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 12px;
+    color: #A79E92;
+    margin-left: 34px;
+  }
+
+  .pc-progress {
+    display: flex;
+    gap: 5px;
+    margin-left: 34px;
+  }
+
+  .pc-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #A79E92;
+  }
+
+  .pc-dot.done { background: #C46F52; }
+  .pc-dot.active { background: #234736; }
+
+  @media (max-width: 700px) {
+    .layout-cards {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<h2>Card Flow Layout Options</h2>
+<p class="subtitle">Three alternatives to the current big-card interrogation feel — pick the direction that resonates.</p>
+
+<div class="layout-cards">
+
+  <!-- OPTION A: Minimal / no box -->
+  <div class="layout-option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="layout-preview">
+      <div class="preview-a">
+        <div class="pa-progress">
+          <div class="pa-dot done"></div>
+          <div class="pa-dot done"></div>
+          <div class="pa-dot active"></div>
+          <div class="pa-dot"></div>
+          <div class="pa-dot"></div>
+          <div class="pa-dot"></div>
+        </div>
+        <p class="pa-question">What do you spend each year?</p>
+        <input class="pa-input" placeholder="$72,000" readonly />
+        <button class="pa-btn">Continue →</button>
+      </div>
+    </div>
+    <div class="layout-meta">
+      <p class="layout-name">A — Minimal / Open</p>
+      <p class="layout-desc">No card box. Question + underline input float directly on the page. Light, editorial, like filling out a letter.</p>
+    </div>
+  </div>
+
+  <!-- OPTION B: Compact card -->
+  <div class="layout-option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="layout-preview">
+      <div class="preview-b">
+        <div class="pb-card">
+          <div class="pb-progress">
+            <div class="pb-dot done"></div>
+            <div class="pb-dot done"></div>
+            <div class="pb-dot active"></div>
+            <div class="pb-dot"></div>
+            <div class="pb-dot"></div>
+            <div class="pb-dot"></div>
+          </div>
+          <p class="pb-question">What do you spend each year?</p>
+          <input class="pb-input" placeholder="$72,000" readonly />
+          <button class="pb-btn">Continue</button>
+        </div>
+      </div>
+    </div>
+    <div class="layout-meta">
+      <p class="layout-name">B — Compact Card</p>
+      <p class="layout-desc">Same card concept, but sized like a dialog — not the whole viewport. Modest scale, still contained.</p>
+    </div>
+  </div>
+
+  <!-- OPTION C: Conversational -->
+  <div class="layout-option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="layout-preview">
+      <div class="preview-c">
+        <div class="pc-prev">Age: 42 · Income: $180k</div>
+        <div class="pc-message">
+          <div class="pc-avatar">M</div>
+          <div class="pc-bubble">
+            <p class="pc-question">What do you spend each year?</p>
+          </div>
+        </div>
+        <div class="pc-reply-row">
+          <div style="width:26px;flex-shrink:0"></div>
+          <input class="pc-input" placeholder="$72,000" readonly />
+          <button class="pc-send">→</button>
+        </div>
+        <div class="pc-progress">
+          <div class="pc-dot done"></div>
+          <div class="pc-dot done"></div>
+          <div class="pc-dot active"></div>
+          <div class="pc-dot"></div>
+          <div class="pc-dot"></div>
+          <div class="pc-dot"></div>
+        </div>
+      </div>
+    </div>
+    <div class="layout-meta">
+      <p class="layout-name">C — Conversational</p>
+      <p class="layout-desc">Marcus "asks" each question. Feels like a dialogue, not a form. Previous answers stay visible as a thread above.</p>
+    </div>
+  </div>
+
+</div>

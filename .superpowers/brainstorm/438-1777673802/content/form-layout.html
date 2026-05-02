@@ -1,0 +1,287 @@
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Source+Sans+3:wght@400;500&display=swap');
+
+  body { background: #F6F1E8; }
+
+  .page-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    color: #234736;
+    margin-bottom: 6px;
+  }
+  .page-sub {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 15px;
+    color: #5F655E;
+    margin-bottom: 28px;
+  }
+
+  .layout-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+
+  .layout-card {
+    background: #FFFDFC;
+    border: 2px solid #A79E92;
+    border-radius: 10px;
+    padding: 0;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    overflow: hidden;
+  }
+  .layout-card.selected {
+    border-color: #234736;
+    box-shadow: 0 0 0 3px rgba(35,71,54,0.15);
+  }
+  .layout-card:hover { border-color: #234736; }
+
+  .card-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: #FFFDFC;
+    background: #234736;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-letter {
+    width: 24px; height: 24px;
+    background: #C46F52;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-weight: 600;
+    color: white;
+    flex-shrink: 0;
+  }
+
+  .card-preview {
+    padding: 14px 16px;
+    min-height: 260px;
+  }
+
+  .card-desc {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13px;
+    color: #5F655E;
+    padding: 0 16px 14px;
+    border-top: 1px solid #F0EBE1;
+    padding-top: 10px;
+    line-height: 1.5;
+  }
+
+  /* Mock form elements */
+  .mock-field {
+    margin-bottom: 10px;
+  }
+  .mock-label {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #5F655E;
+    margin-bottom: 3px;
+  }
+  .mock-input {
+    background: #F6F1E8;
+    border: 1px solid #A79E92;
+    border-radius: 5px;
+    padding: 6px 9px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 12px;
+    color: #A79E92;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .mock-input.filled {
+    color: #1F2420;
+    border-color: #234736;
+  }
+  .mock-section-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #234736;
+    border-bottom: 1px solid #A79E92;
+    padding-bottom: 5px;
+    margin-bottom: 8px;
+    margin-top: 12px;
+  }
+  .mock-section-label:first-child { margin-top: 0; }
+  .mock-btn {
+    background: #234736;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 7px 14px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11px;
+    cursor: pointer;
+    margin-top: 6px;
+  }
+  .mock-btn.secondary {
+    background: transparent;
+    color: #234736;
+    border: 1px solid #234736;
+  }
+
+  /* Option B — conversational stack */
+  .answered-pill {
+    background: #F6F1E8;
+    border: 1px solid #A79E92;
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11px;
+    color: #5F655E;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 6px;
+  }
+  .answered-pill span { color: #234736; font-weight: 600; }
+  .answered-dot { width: 6px; height: 6px; background: #C46F52; border-radius: 50%; }
+
+  .active-question {
+    background: #FFFDFC;
+    border: 1px solid #234736;
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 8px;
+  }
+  .active-q-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    color: #234736;
+    margin-bottom: 8px;
+  }
+
+  /* Option C — single page */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .badge {
+    display: inline-block;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-left: 8px;
+  }
+  .badge-rec { background: #C46F52; color: white; }
+  .badge-warm { background: #e8ede8; color: #234736; }
+  .badge-simple { background: #A79E92; color: white; }
+</style>
+
+<p class="page-title">How should the questions be laid out?</p>
+<p class="page-sub">Right now every question appears alone, one at a time. Here are three different approaches — pick the one that feels right for this tool.</p>
+
+<div class="layout-cards">
+
+  <!-- Option A: Grouped Sections -->
+  <div class="layout-card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-label">
+      <div class="card-letter">A</div>
+      Grouped Sections <span class="badge badge-warm">Balanced</span>
+    </div>
+    <div class="card-preview">
+      <div class="mock-section-label">About You</div>
+      <div class="two-col">
+        <div class="mock-field">
+          <div class="mock-label">Current Age</div>
+          <div class="mock-input">e.g. 38</div>
+        </div>
+        <div class="mock-field">
+          <div class="mock-label">Retire By Age</div>
+          <div class="mock-input">e.g. 65</div>
+        </div>
+      </div>
+      <div class="mock-section-label">Your Finances</div>
+      <div class="mock-field">
+        <div class="mock-label">Annual Household Income</div>
+        <div class="mock-input">e.g. $85,000 / year</div>
+      </div>
+      <div class="mock-field">
+        <div class="mock-label">Current Retirement Savings</div>
+        <div class="mock-input">e.g. $42,000</div>
+      </div>
+      <div class="mock-field">
+        <div class="mock-label">Monthly Savings Contribution</div>
+        <div class="mock-input">e.g. $500 / month</div>
+      </div>
+      <button class="mock-btn" style="width:100%">See My Results →</button>
+    </div>
+    <div class="card-desc">All 5 fields on one page, split into two logical groups. Fast to complete, no back-and-forth. Works best for users who just want to get to the letter.</div>
+  </div>
+
+  <!-- Option B: Conversational Stack -->
+  <div class="layout-card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-label">
+      <div class="card-letter">B</div>
+      Conversational Stack <span class="badge badge-rec">Recommended</span>
+    </div>
+    <div class="card-preview">
+      <div class="answered-pill"><div class="answered-dot"></div> Age <span>38</span></div>
+      <div class="answered-pill"><div class="answered-dot"></div> Retires at <span>65</span></div>
+      <div class="answered-pill"><div class="answered-dot"></div> Income <span>$85k/yr</span></div>
+
+      <div class="active-question">
+        <div class="active-q-text">What's your current retirement savings balance?</div>
+        <div class="mock-input" style="border-color:#234736; color:#1F2420">$42,000</div>
+        <div style="display:flex; gap:8px; margin-top:8px;">
+          <button class="mock-btn">Continue →</button>
+          <button class="mock-btn secondary">← Edit</button>
+        </div>
+      </div>
+
+      <div style="margin-top:10px; font-family:'Source Sans 3',sans-serif; font-size:11px; color:#A79E92; text-align:center;">1 more question after this</div>
+    </div>
+    <div class="card-desc">One question at a time, but answered questions stack above as small chips — you see your history, can edit past answers, and it feels like a conversation, not an interrogation.</div>
+  </div>
+
+  <!-- Option C: Single Page All at Once -->
+  <div class="layout-card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-label">
+      <div class="card-letter">C</div>
+      All At Once <span class="badge badge-simple">Simplest</span>
+    </div>
+    <div class="card-preview">
+      <div style="font-family:'Cormorant Garamond',serif; font-size:14px; color:#234736; margin-bottom:10px;">Tell me a bit about your situation.</div>
+      <div class="mock-field">
+        <div class="mock-label">Current Age</div>
+        <div class="mock-input filled">38</div>
+      </div>
+      <div class="mock-field">
+        <div class="mock-label">Annual Household Income</div>
+        <div class="mock-input">e.g. $85,000 / year</div>
+      </div>
+      <div class="mock-field">
+        <div class="mock-label">Current Retirement Savings</div>
+        <div class="mock-input">e.g. $42,000</div>
+      </div>
+      <div class="mock-field">
+        <div class="mock-label">Monthly Savings Contribution</div>
+        <div class="mock-input">e.g. $500 / month</div>
+      </div>
+      <div class="mock-field">
+        <div class="mock-label">Target Retirement Age</div>
+        <div class="mock-input">e.g. 65</div>
+      </div>
+      <button class="mock-btn" style="width:100%; margin-top:4px;">See My Letter →</button>
+    </div>
+    <div class="card-desc">No steps, no cards — a clean form with all fields visible. Familiar web-form UX. Quickest to fill out, but the least personal feel.</div>
+  </div>
+
+</div>

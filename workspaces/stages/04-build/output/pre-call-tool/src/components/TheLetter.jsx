@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 
 import { calculate } from '../calc';
 import { LETTER_TIER_META } from '../copy';
+import InfoTooltip from './InfoTooltip';
+import { getRetirementTooltipContent } from './retirementTooltipContent';
 import {
   formatSlotValue,
   getLetterContent,
@@ -14,6 +16,11 @@ import {
 const WHOLE_DOLLAR_FORMATTER = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
+  maximumFractionDigits: 0,
+});
+
+const PERCENT_FORMATTER = new Intl.NumberFormat('en-US', {
+  style: 'percent',
   maximumFractionDigits: 0,
 });
 
@@ -44,11 +51,120 @@ const FONT_SANS = '"Inter", "Helvetica Neue", Arial, sans-serif';
 const FONT_SERIF = '"Cormorant Garamond", Georgia, serif';
 const FONT_SCRIPT = '"Great Vibes", "Allura", cursive';
 
-function StatCard({ label, value, isMobile }) {
+function getStatValueSizeBounds(isMobile) {
+  return isMobile
+    ? { max: 20, min: 9 }
+    : { max: 34, min: 12 };
+}
+
+function AutoFitStatValue({ isMobile, value }) {
+  const valueRef = useRef(null);
+  const { max, min } = getStatValueSizeBounds(isMobile);
+  const [fontSize, setFontSize] = useState(max);
+
+  useEffect(() => {
+    setFontSize(max);
+  }, [max, value]);
+
+  useEffect(() => {
+    const element = valueRef.current;
+
+    if (!element) {
+      return undefined;
+    }
+
+    let frameId = null;
+
+    function fitText() {
+      const nextElement = valueRef.current;
+
+      if (!nextElement) {
+        return;
+      }
+
+      let nextFontSize = max;
+      nextElement.style.fontSize = `${nextFontSize}px`;
+
+      while (nextFontSize > min && nextElement.scrollWidth > nextElement.clientWidth) {
+        nextFontSize -= 1;
+        nextElement.style.fontSize = `${nextFontSize}px`;
+      }
+
+      setFontSize(nextFontSize);
+    }
+
+    frameId = window.requestAnimationFrame(fitText);
+    window.addEventListener('resize', fitText);
+
+    return () => {
+      if (frameId != null) {
+        window.cancelAnimationFrame(frameId);
+      }
+      window.removeEventListener('resize', fitText);
+    };
+  }, [isMobile, max, min, value]);
+
   return (
-    <div style={isMobile ? styles.mobileStatCard : styles.statCard}>
+    <div
+      ref={valueRef}
+      data-stat-value="true"
+      style={{
+        ...(isMobile ? styles.mobileStatValue : styles.statValue),
+        fontSize: `${fontSize}px`,
+      }}
+    >
+      {value}
+    </div>
+  );
+}
+
+function TooltipBody({ content }) {
+  return (
+    <div>
+      <p style={styles.tooltipDescription}>{content.description}</p>
+    </div>
+  );
+}
+
+function StatCard({
+  infoContent,
+  isInfoOpen,
+  isMobile,
+  label,
+  onInfoToggle,
+  setContainerRef,
+  type,
+  value,
+}) {
+  const tooltipId = `${type}-info-tooltip`;
+
+  return (
+    <div
+      ref={setContainerRef}
+      style={isMobile ? styles.mobileStatCard : styles.statCard}
+    >
+      <button
+        aria-describedby={isInfoOpen ? tooltipId : undefined}
+        aria-expanded={isInfoOpen}
+        aria-label={`Learn how ${label} is calculated`}
+        onClick={onInfoToggle}
+        style={styles.infoButton}
+        type="button"
+      >
+        <span aria-hidden="true" style={styles.infoButtonText}>
+          i
+        </span>
+      </button>
+      {isInfoOpen && infoContent ? (
+        <InfoTooltip
+          body={<TooltipBody content={infoContent} />}
+          id={tooltipId}
+          isMobile={isMobile}
+          title={null}
+        />
+      ) : null}
       <div style={styles.statLabel}>{label}</div>
-      <div style={isMobile ? styles.mobileStatValue : styles.statValue}>{value}</div>
+      <AutoFitStatValue isMobile={isMobile} value={value} />
     </div>
   );
 }
@@ -75,13 +191,23 @@ function TheLetter({ inputs, isMobile, sliderState }) {
     () => getLetterContent(lockedTierKey),
     [lockedTierKey],
   );
+  const lockedSlotValues = useMemo(
+    () => getReactiveSlotValues(inputs, initialCalculation),
+    [inputs, initialCalculation],
+  );
   const reactiveSlotValues = useMemo(
-    () => getReactiveSlotValues(inputs, reactiveCalculation),
-    [inputs, reactiveCalculation],
+    () => getReactiveSlotValues(inputs, initialCalculation),
+    [inputs, initialCalculation],
   );
   const [highlightedSlots, setHighlightedSlots] = useState(() => new Set());
+  const [openTooltipKey, setOpenTooltipKey] = useState(null);
   const previousReactiveSlotValuesRef = useRef(null);
   const slotTimeoutsRef = useRef(new Map());
+  const statCardRefs = useRef({});
+
+  useEffect(() => {
+    setOpenTooltipKey(null);
+  }, [inputs]);
 
   useEffect(() => {
     return () => {
@@ -139,6 +265,34 @@ function TheLetter({ inputs, isMobile, sliderState }) {
     return undefined;
   }, [reactiveCalculation, reactiveSlotValues]);
 
+  useEffect(() => {
+    if (openTooltipKey == null) {
+      return undefined;
+    }
+
+    function handleMouseDown(event) {
+      const activeCard = statCardRefs.current[openTooltipKey];
+
+      if (activeCard && !activeCard.contains(event.target)) {
+        setOpenTooltipKey(null);
+      }
+    }
+
+    function handleKeyDown(event) {
+      if (event.key === 'Escape') {
+        setOpenTooltipKey(null);
+      }
+    }
+
+    document.addEventListener('mousedown', handleMouseDown);
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('mousedown', handleMouseDown);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [openTooltipKey]);
+
   if (!initialCalculation || !reactiveCalculation) {
     return null;
   }
@@ -147,10 +301,53 @@ function TheLetter({ inputs, isMobile, sliderState }) {
   const badgeColor = TIER_BADGE_COLORS[lockedTierKey] ?? C.accentRust;
 
   const projectedSavings = WHOLE_DOLLAR_FORMATTER.format(
-    reactiveCalculation.totalProjectedRetirementSavings,
+    initialCalculation.totalProjectedRetirementSavings,
   );
-  const retirementTarget = WHOLE_DOLLAR_FORMATTER.format(reactiveCalculation.retirementTarget);
-  const gap = WHOLE_DOLLAR_FORMATTER.format(Math.abs(reactiveCalculation.gap));
+  const retirementTarget = WHOLE_DOLLAR_FORMATTER.format(initialCalculation.retirementTarget);
+  const gap = WHOLE_DOLLAR_FORMATTER.format(Math.abs(initialCalculation.gap));
+  const visibleStatCount = initialCalculation.gap > 0 ? 3 : 2;
+  const statsGridStyle = {
+    ...(isMobile ? styles.mobileStatsGrid : styles.statsGrid),
+    gridTemplateColumns: `repeat(${visibleStatCount}, minmax(0, 1fr))`,
+  };
+  const formatCurrency = (amount) => WHOLE_DOLLAR_FORMATTER.format(Math.abs(amount));
+  const formatPercent = (amount) => PERCENT_FORMATTER.format(amount);
+  const projectedSavingsTooltip = getRetirementTooltipContent({
+    type: 'projectedSavings',
+    calculation: initialCalculation,
+    inputs,
+    formatCurrency,
+    formatPercent,
+  });
+  const retirementTargetTooltip = getRetirementTooltipContent({
+    type: 'retirementTarget',
+    calculation: initialCalculation,
+    inputs,
+    formatCurrency,
+    formatPercent,
+  });
+  const gapTooltip = getRetirementTooltipContent({
+    type: 'gap',
+    calculation: initialCalculation,
+    inputs,
+    formatCurrency,
+    formatPercent,
+  });
+
+  function toggleTooltip(key) {
+    setOpenTooltipKey((currentKey) => (currentKey === key ? null : key));
+  }
+
+  function setStatCardRef(key) {
+    return (node) => {
+      if (node) {
+        statCardRefs.current[key] = node;
+        return;
+      }
+
+      delete statCardRefs.current[key];
+    };
+  }
 
   function renderParagraph(paragraph) {
     return renderTemplateParts(paragraph).map((part, index) =>
@@ -166,7 +363,7 @@ function TheLetter({ inputs, isMobile, sliderState }) {
           initial={false}
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
-          {formatSlotValue(part.value, inputs, reactiveCalculation)}
+          {lockedSlotValues[part.value] ?? formatSlotValue(part.value, inputs, initialCalculation)}
         </motion.span>
       ),
     );
@@ -183,13 +380,38 @@ function TheLetter({ inputs, isMobile, sliderState }) {
         </div>
       </header>
 
-      <div
-        style={isMobile ? styles.mobileStatsGrid : styles.statsGrid}
-      >
-        <StatCard label="Projected savings" value={projectedSavings} isMobile={isMobile} />
-        <StatCard label="Retirement target" value={retirementTarget} isMobile={isMobile} />
-        {reactiveCalculation.gap > 0 && (
-          <StatCard label="Gap" value={gap} isMobile={isMobile} />
+      <div style={statsGridStyle}>
+        <StatCard
+          infoContent={projectedSavingsTooltip}
+          isInfoOpen={openTooltipKey === 'projectedSavings'}
+          isMobile={isMobile}
+          label="Projected savings"
+          onInfoToggle={() => toggleTooltip('projectedSavings')}
+          setContainerRef={setStatCardRef('projectedSavings')}
+          type="projectedSavings"
+          value={projectedSavings}
+        />
+        <StatCard
+          infoContent={retirementTargetTooltip}
+          isInfoOpen={openTooltipKey === 'retirementTarget'}
+          isMobile={isMobile}
+          label="Retirement target"
+          onInfoToggle={() => toggleTooltip('retirementTarget')}
+          setContainerRef={setStatCardRef('retirementTarget')}
+          type="retirementTarget"
+          value={retirementTarget}
+        />
+        {initialCalculation.gap > 0 && (
+          <StatCard
+            infoContent={gapTooltip}
+            isInfoOpen={openTooltipKey === 'gap'}
+            isMobile={isMobile}
+            label="Gap"
+            onInfoToggle={() => toggleTooltip('gap')}
+            setContainerRef={setStatCardRef('gap')}
+            type="gap"
+            value={gap}
+          />
         )}
       </div>
 
@@ -225,11 +447,13 @@ function TheLetter({ inputs, isMobile, sliderState }) {
 const styles = {
   card: {
     width: '100%',
+    height: '100%',
     backgroundColor: C.cardBg,
     border: `1px solid ${C.borderSoft}`,
-    borderRadius: '10px',
+    borderRadius: '28px',
     padding: 'clamp(30px, 4vw, 48px) clamp(22px, 5vw, 56px) 36px',
     boxShadow: '0 12px 32px rgba(60, 45, 30, 0.12)',
+    boxSizing: 'border-box',
   },
   mobileCard: {
     width: '100%',
@@ -288,55 +512,60 @@ const styles = {
   },
   statsGrid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-    gap: '18px',
+    gap: '14px',
     marginBottom: '42px',
   },
   mobileStatsGrid: {
     display: 'grid',
-    gridTemplateColumns: '1fr',
-    gap: '12px',
+    gap: '10px',
     marginBottom: '34px',
   },
   statCard: {
+    position: 'relative',
     backgroundColor: C.statCardBg,
     border: `1px solid ${C.borderLight}`,
     borderRadius: '9px',
-    padding: '24px 20px',
+    padding: '18px 14px',
     textAlign: 'center',
+    minWidth: 0,
   },
   mobileStatCard: {
+    position: 'relative',
     backgroundColor: C.statCardBg,
     border: `1px solid ${C.borderLight}`,
     borderRadius: '9px',
-    padding: '22px 16px',
+    padding: '14px 10px',
     textAlign: 'center',
+    minWidth: 0,
   },
   statLabel: {
-    fontSize: '16px',
+    fontSize: 'clamp(12px, 1.4vw, 16px)',
     color: C.statLabel,
-    marginBottom: '10px',
+    marginBottom: '8px',
+    paddingRight: '26px',
     fontFamily: FONT_SANS,
   },
   statValue: {
     fontFamily: FONT_SANS,
-    fontSize: 'clamp(32px, 4vw, 44px)',
+    fontSize: 'clamp(16px, 2.3vw, 34px)',
     fontWeight: '600',
     lineHeight: '1.05',
     color: C.textMain,
     letterSpacing: '-0.03em',
     fontVariantNumeric: 'tabular-nums',
     fontFeatureSettings: '"tnum"',
+    whiteSpace: 'nowrap',
   },
   mobileStatValue: {
     fontFamily: FONT_SANS,
-    fontSize: '38px',
+    fontSize: 'clamp(12px, 4vw, 20px)',
     fontWeight: '600',
     lineHeight: '1',
     color: C.textMain,
     letterSpacing: '-0.03em',
     fontVariantNumeric: 'tabular-nums',
     fontFeatureSettings: '"tnum"',
+    whiteSpace: 'nowrap',
   },
   section: {
     marginBottom: '28px',
@@ -390,7 +619,7 @@ const styles = {
   },
   signatureText: {
     fontFamily: FONT_SCRIPT,
-    fontSize: 'clamp(52px, 6vw, 64px)',
+    fontSize: 'clamp(36px, 5vw, 64px)',
     color: C.signature,
     lineHeight: '1',
   },
@@ -399,6 +628,34 @@ const styles = {
     fontSize: '58px',
     color: C.signature,
     lineHeight: '1',
+  },
+  infoButton: {
+    position: 'absolute',
+    top: '10px',
+    right: '10px',
+    width: '20px',
+    height: '20px',
+    borderRadius: '999px',
+    border: `1px solid ${C.accentRust}`,
+    backgroundColor: '#FFFDF8',
+    color: C.accentRust,
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 0,
+    cursor: 'pointer',
+    boxShadow: '0 2px 8px rgba(60, 45, 30, 0.08)',
+  },
+  infoButtonText: {
+    fontSize: '12px',
+    fontWeight: 700,
+    lineHeight: 1,
+  },
+  tooltipDescription: {
+    margin: 0,
+    fontSize: '12px',
+    lineHeight: 1.5,
+    color: C.textMain,
   },
 };
 

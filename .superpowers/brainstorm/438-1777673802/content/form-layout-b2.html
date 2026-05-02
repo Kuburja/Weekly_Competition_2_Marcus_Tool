@@ -1,0 +1,259 @@
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Source+Sans+3:wght@400;500&display=swap');
+
+  body { background: #F6F1E8; }
+
+  .page-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    color: #234736;
+    margin-bottom: 6px;
+  }
+  .page-sub {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 14px;
+    color: #5F655E;
+    margin-bottom: 28px;
+  }
+
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+
+  /* ---- MOCKUP SHELL ---- */
+  .phone-shell {
+    background: #FFFDFC;
+    border: 2px solid #A79E92;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+  }
+  .phone-header {
+    background: #234736;
+    padding: 12px 18px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    color: #F6F1E8;
+  }
+  .phone-body { padding: 18px; background: #F6F1E8; min-height: 320px; }
+
+  /* ---- CHIPS ---- */
+  .chips { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 16px; }
+
+  .chip {
+    background: #FFFDFC;
+    border: 1px solid #A79E92;
+    border-radius: 20px;
+    padding: 4px 11px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 12px;
+    color: #5F655E;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .chip:hover { border-color: #234736; background: #eef3ef; }
+  .chip .dot { width: 6px; height: 6px; background: #C46F52; border-radius: 50%; flex-shrink: 0; }
+  .chip .val { color: #234736; font-weight: 600; }
+  .chip .edit-hint {
+    font-size: 10px;
+    color: #A79E92;
+    margin-left: 2px;
+  }
+
+  /* chip being edited — expanded inline */
+  .chip.editing {
+    border-color: #234736;
+    background: #234736;
+    border-radius: 8px;
+    padding: 6px 10px;
+    gap: 8px;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    cursor: default;
+  }
+  .chip.editing .chip-edit-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #A79E92;
+  }
+  .chip.editing .chip-edit-row {
+    display: flex; gap: 8px; align-items: center; width: 100%;
+  }
+  .chip.editing input {
+    background: #F6F1E8;
+    border: 1px solid #A79E92;
+    border-radius: 5px;
+    padding: 5px 9px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13px;
+    color: #1F2420;
+    flex: 1;
+    outline: none;
+  }
+  .chip.editing .save-btn {
+    background: #C46F52;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  /* ---- ACTIVE QUESTION ---- */
+  .active-question {
+    background: #FFFDFC;
+    border: 1px solid #234736;
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .active-q-label {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #C46F52;
+    margin-bottom: 5px;
+  }
+  .active-q-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    color: #234736;
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+  .active-input {
+    background: #F6F1E8;
+    border: 1px solid #234736;
+    border-radius: 6px;
+    padding: 8px 11px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13px;
+    color: #A79E92;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+  }
+  .continue-btn {
+    background: #234736;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 18px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 12px;
+    cursor: pointer;
+    width: 100%;
+  }
+
+  .progress-note {
+    text-align: center;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11px;
+    color: #A79E92;
+    margin-top: 12px;
+  }
+
+  /* ---- ANNOTATION CALLOUTS ---- */
+  .annotation {
+    background: #FFFDFC;
+    border: 1px solid #A79E92;
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 14px;
+  }
+  .annotation-title {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: #234736;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+  }
+  .annotation-body {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13px;
+    color: #5F655E;
+    line-height: 1.5;
+  }
+  .annotation-body strong { color: #1F2420; }
+</style>
+
+<p class="page-title">Option B — refined: click a chip to edit</p>
+<p class="page-sub">Left: normal flow. Right: what happens when you click "Age 38" to edit it.</p>
+
+<div class="split">
+
+  <!-- STATE 1: Normal active flow -->
+  <div>
+    <div style="font-family:'Source Sans 3',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:0.07em;color:#A79E92;margin-bottom:8px;">Normal state</div>
+    <div class="phone-shell">
+      <div class="phone-header">Are We Okay?</div>
+      <div class="phone-body">
+        <div class="chips">
+          <div class="chip"><div class="dot"></div>Age <span class="val">38</span> <span class="edit-hint">✎</span></div>
+          <div class="chip"><div class="dot"></div>Retires at <span class="val">65</span> <span class="edit-hint">✎</span></div>
+          <div class="chip"><div class="dot"></div>Income <span class="val">$85k/yr</span> <span class="edit-hint">✎</span></div>
+        </div>
+        <div class="active-question">
+          <div class="active-q-label">Question 4 of 5</div>
+          <div class="active-q-text">What's your current retirement savings balance?</div>
+          <input class="active-input" placeholder="e.g. $42,000" />
+          <button class="continue-btn">Continue →</button>
+        </div>
+        <div class="progress-note">1 more question after this</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATE 2: Chip expanded for editing -->
+  <div>
+    <div style="font-family:'Source Sans 3',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:0.07em;color:#A79E92;margin-bottom:8px;">After clicking "Age 38"</div>
+    <div class="phone-shell">
+      <div class="phone-header">Are We Okay?</div>
+      <div class="phone-body">
+        <div class="chips">
+          <!-- Age chip — now expanded inline for editing -->
+          <div class="chip editing">
+            <div class="chip-edit-label">Current Age</div>
+            <div class="chip-edit-row">
+              <input value="38" />
+              <button class="save-btn">Save ✓</button>
+            </div>
+          </div>
+          <div class="chip"><div class="dot"></div>Retires at <span class="val">65</span> <span class="edit-hint">✎</span></div>
+          <div class="chip"><div class="dot"></div>Income <span class="val">$85k/yr</span> <span class="edit-hint">✎</span></div>
+        </div>
+        <div class="active-question">
+          <div class="active-q-label">Question 4 of 5</div>
+          <div class="active-q-text">What's your current retirement savings balance?</div>
+          <input class="active-input" placeholder="e.g. $42,000" />
+          <button class="continue-btn">Continue →</button>
+        </div>
+        <div class="progress-note">1 more question after this</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div style="margin-top:24px;">
+  <div class="annotation">
+    <div class="annotation-title">How it works</div>
+    <div class="annotation-body">
+      Answered questions sit at the top as <strong>small clickable chips</strong>. A subtle pencil icon (✎) hints they're editable. Click one → it expands inline to a small edit field right in the chip row, current value pre-filled. Hit <strong>Save</strong> (or press Enter) and it collapses back. No separate page, no "go back" button.
+    </div>
+  </div>
+  <div class="annotation">
+    <div class="annotation-title">Does this look right?</div>
+    <div class="annotation-body">
+      Confirm this and we'll move on to designing the <strong>debt question</strong> (item 5) and the <strong>slides section</strong> (item 8) — the two items that need the most planning.
+    </div>
+  </div>
+</div>

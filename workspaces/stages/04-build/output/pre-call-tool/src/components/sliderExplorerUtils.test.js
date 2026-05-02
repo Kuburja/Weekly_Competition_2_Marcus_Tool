@@ -5,6 +5,7 @@ import { calculate } from '../calc';
 import {
   formatMonthlySavingsValue,
   formatRetirementAgeValue,
+  getOutlookTone,
   getMonthlySavingsMax,
   getSliderContext,
 } from './sliderExplorerUtils';
@@ -66,5 +67,12 @@ describe('sliderExplorerUtils', () => {
         sliderState: onTargetState,
       }),
     ).toBe(SLIDER_COPY.onTargetContext);
+  });
+
+  it('classifies the current outcome into an outlook tone for the summary badge', () => {
+    expect(getOutlookTone(calculate(inputs))).toMatchObject({
+      label: 'Slightly Behind',
+      tone: 'caution',
+    });
   });
 });

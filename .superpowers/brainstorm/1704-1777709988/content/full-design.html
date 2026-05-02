@@ -1,0 +1,349 @@
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Source+Sans+3:wght@400;600&display=swap');
+
+  .design-wrap {
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  /* Two-column: mockup on left, notes on right */
+  .design-cols {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 32px;
+    align-items: start;
+    margin-top: 24px;
+  }
+
+  /* ---- MOCKUP ---- */
+  .app-mockup {
+    background: #F6F1E8;
+    border: 1px solid #d8d2c8;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .app-inner {
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 40px 32px 32px;
+    display: grid;
+    gap: 28px;
+  }
+
+  /* Intro */
+  .intro-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 42px;
+    font-weight: 600;
+    color: #234736;
+    margin: 0;
+    line-height: 0.95;
+  }
+
+  .intro-body {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 15px;
+    color: #2C2C2B;
+    line-height: 1.6;
+    margin: 8px 0 0;
+    max-width: 46ch;
+  }
+
+  /* Thread */
+  .thread {
+    display: grid;
+    gap: 8px;
+  }
+
+  .msg-row {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .avatar {
+    width: 28px; height: 28px;
+    background: #234736;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px; font-weight: 600; color: #FFFDFC;
+    margin-top: 2px;
+  }
+
+  .q-bubble {
+    background: #FFFDFC;
+    border: 1px solid #ddd8cf;
+    padding: 10px 14px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px; font-weight: 600;
+    color: #234736;
+    line-height: 1.15;
+    flex: 1;
+  }
+
+  .react-bubble {
+    background: transparent;
+    padding: 2px 0 2px 14px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13px;
+    color: #5F655E;
+    line-height: 1.45;
+    font-style: italic;
+    flex: 1;
+    border-left: 2px solid #e0dbd3;
+  }
+
+  .user-row {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .user-bubble {
+    background: #234736;
+    color: #FFFDFC;
+    padding: 9px 14px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.3;
+    max-width: 65%;
+  }
+
+  .spacer { height: 4px; }
+
+  /* Active input area */
+  .input-area {
+    display: grid;
+    gap: 12px;
+  }
+
+  .active-question {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .active-q-bubble {
+    background: #FFFDFC;
+    border: 1px solid #234736;
+    padding: 10px 14px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px; font-weight: 600;
+    color: #234736; line-height: 1.15;
+    flex: 1;
+  }
+
+  .reply-row {
+    display: flex;
+    gap: 8px;
+    margin-left: 38px;
+  }
+
+  .reply-input {
+    flex: 1;
+    border: 1px solid #A79E92;
+    border-radius: 0;
+    background: #FFFDFC;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 16px; color: #2C2C2B;
+    padding: 10px 12px;
+    outline: none;
+  }
+
+  .reply-btn {
+    background: #234736; color: #FFFDFC;
+    border: none; cursor: pointer;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 16px; font-weight: 600;
+    padding: 10px 16px;
+    white-space: nowrap;
+  }
+
+  /* Progress dots */
+  .progress-row {
+    display: flex;
+    gap: 7px;
+    margin-left: 38px;
+  }
+
+  .dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+  }
+
+  .dot-done { background: #C46F52; }
+  .dot-active { background: #234736; }
+  .dot-next { background: #A79E92; }
+
+  /* ---- DESIGN NOTES ---- */
+  .notes {
+    display: grid;
+    gap: 20px;
+  }
+
+  .note-block {
+    background: #fff;
+    border: 1px solid #e8e4de;
+    border-radius: 4px;
+    padding: 14px 16px;
+  }
+
+  .note-label {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: #A79E92;
+    margin: 0 0 6px;
+  }
+
+  .note-text {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13px;
+    color: #2C2C2B;
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  .note-text + .note-text { margin-top: 8px; }
+
+  .approve-btn {
+    width: 100%;
+    background: #234736;
+    color: #FFFDFC;
+    border: none;
+    padding: 13px 16px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 2px;
+  }
+
+  @media (max-width: 760px) {
+    .design-cols { grid-template-columns: 1fr; }
+    .app-inner { padding: 28px 20px; }
+  }
+</style>
+
+<div class="design-wrap">
+  <h2>Conversational Flow — Full Design</h2>
+  <p class="subtitle">Mid-conversation state (3 of 6 answered). Click "Looks good" if this is the direction.</p>
+
+  <div class="design-cols">
+
+    <!-- MOCKUP -->
+    <div class="app-mockup" data-choice="approve" onclick="toggleSelect(this)">
+      <div class="app-inner">
+
+        <!-- Intro -->
+        <div>
+          <h1 class="intro-title">Are We Okay?</h1>
+          <p class="intro-body">Five questions. About two minutes. Your answers help me prepare something useful before we meet.</p>
+        </div>
+
+        <!-- Thread: 3 answered Q&As -->
+        <div class="thread">
+
+          <!-- Q1 -->
+          <div class="msg-row">
+            <div class="avatar">M</div>
+            <div class="q-bubble">How old are you?</div>
+          </div>
+          <div class="user-row"><div class="user-bubble">42</div></div>
+          <div class="msg-row">
+            <div class="avatar">M</div>
+            <div class="react-bubble">Plenty of runway — and enough years behind you to have made some real moves.</div>
+          </div>
+
+          <div class="spacer"></div>
+
+          <!-- Q2 -->
+          <div class="msg-row">
+            <div class="avatar">M</div>
+            <div class="q-bubble">What's your household income?</div>
+          </div>
+          <div class="user-row"><div class="user-bubble">$180,000</div></div>
+          <div class="msg-row">
+            <div class="avatar">M</div>
+            <div class="react-bubble">That's a solid base. Let's see how far it goes.</div>
+          </div>
+
+          <div class="spacer"></div>
+
+          <!-- Q3 -->
+          <div class="msg-row">
+            <div class="avatar">M</div>
+            <div class="q-bubble">What do you spend each year?</div>
+          </div>
+          <div class="user-row"><div class="user-bubble">$96,000</div></div>
+          <div class="msg-row">
+            <div class="avatar">M</div>
+            <div class="react-bubble">Spending 53% of your income. Not unusual — but that margin matters.</div>
+          </div>
+
+          <div class="spacer"></div>
+        </div>
+
+        <!-- Active question (Q4) -->
+        <div class="input-area">
+          <div class="active-question">
+            <div class="avatar">M</div>
+            <div class="active-q-bubble">How much have you saved so far?</div>
+          </div>
+          <div class="reply-row">
+            <input class="reply-input" placeholder="$240,000" readonly />
+            <button class="reply-btn">→</button>
+          </div>
+          <div class="progress-row">
+            <div class="dot dot-done"></div>
+            <div class="dot dot-done"></div>
+            <div class="dot dot-done"></div>
+            <div class="dot dot-active"></div>
+            <div class="dot dot-next"></div>
+            <div class="dot dot-next"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- DESIGN NOTES -->
+    <div class="notes">
+
+      <div class="note-block">
+        <p class="note-label">Thread structure</p>
+        <p class="note-text">Each exchange is 3 items: Marcus's question → your answer (right-aligned green bubble) → Marcus's reaction (stays permanently, italic, left-indented).</p>
+      </div>
+
+      <div class="note-block">
+        <p class="note-label">Active question</p>
+        <p class="note-text">Current question gets a green border instead of grey — visually marks "this is where you are." Input + arrow button sit inline below it, indented to align with the bubble.</p>
+      </div>
+
+      <div class="note-block">
+        <p class="note-label">Progress dots</p>
+        <p class="note-text">6 dots below the input. Terracotta = done, dark green = active, grey = upcoming.</p>
+      </div>
+
+      <div class="note-block">
+        <p class="note-label">Editing previous answers</p>
+        <p class="note-text">The editable chips are removed — they don't fit the thread metaphor. If someone needs to correct an answer, they'd just restart (the thread is short, ~2 min).</p>
+      </div>
+
+      <div class="note-block">
+        <p class="note-label">Scroll behavior</p>
+        <p class="note-text">Thread grows downward. After each answer + reaction, auto-scroll keeps the active input in view. No jumping.</p>
+      </div>
+
+      <button class="approve-btn" onclick="window.recordChoice && window.recordChoice('approve', 'Looks good — approve design')">
+        Looks good →
+      </button>
+
+    </div>
+  </div>
+</div>

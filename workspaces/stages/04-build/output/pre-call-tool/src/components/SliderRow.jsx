@@ -1,14 +1,14 @@
 import { COLOR_ACCENT, COLOR_PRIMARY, COLOR_SURFACE, FONT_BODY, FONT_HEADING } from '../constants';
 
-const BORDER_SOFT = '#E4D9CC';
-const SURFACE_SOFT = '#FBF7EF';
+const BORDER_SOFT = '#DECFC1';
+const SURFACE_SOFT = '#F4EEE3';
 const TRACK_REMAINING = '#DDDDD8';
 const TEXT_MUTED = '#7B817D';
 const TEXT_SECONDARY = '#4E5752';
 
 function DollarIcon() {
   return (
-    <svg fill="none" height="20" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
+    <svg fill="none" height="14" viewBox="0 0 20 20" width="14" xmlns="http://www.w3.org/2000/svg">
       <text
         dominantBaseline="auto"
         fill={COLOR_PRIMARY}
@@ -27,7 +27,7 @@ function DollarIcon() {
 
 function CalendarIcon() {
   return (
-    <svg fill="none" height="20" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
+    <svg fill="none" height="14" viewBox="0 0 20 20" width="14" xmlns="http://www.w3.org/2000/svg">
       <rect height="13" rx="2" stroke={COLOR_PRIMARY} strokeWidth="1.5" width="16" x="2" y="4" />
       <path d="M2 8h16" stroke={COLOR_PRIMARY} strokeWidth="1.5" />
       <path d="M6 2v3M14 2v3" stroke={COLOR_PRIMARY} strokeLinecap="round" strokeWidth="1.5" />
@@ -77,7 +77,7 @@ function SliderRow({
           step={step}
           style={{
             ...styles.input,
-            background: `linear-gradient(to right, ${COLOR_ACCENT} ${percent}%, ${TRACK_REMAINING} ${percent}%)`,
+            '--fill-pct': `${percent}%`,
           }}
           type="range"
           value={value}
@@ -94,22 +94,22 @@ function SliderRow({
 
 const styles = {
   card: {
-    background: COLOR_SURFACE,
+    background: 'rgba(255, 253, 249, 0.94)',
     border: `1px solid ${BORDER_SOFT}`,
-    borderRadius: '18px',
-    padding: '18px 16px 16px',
-    boxShadow: '0 3px 10px rgba(40, 35, 28, 0.04)',
+    borderRadius: '22px',
+    padding: '14px 16px 14px',
+    boxShadow: '0 12px 28px rgba(40, 35, 28, 0.05)',
   },
   topRow: {
     display: 'flex',
     alignItems: 'flex-start',
     flexWrap: 'wrap',
-    gap: '12px',
+    gap: '10px',
   },
   iconCircle: {
-    width: '48px',
-    height: '48px',
-    minWidth: '48px',
+    width: '30px',
+    height: '30px',
+    minWidth: '30px',
     borderRadius: '999px',
     background: SURFACE_SOFT,
     display: 'flex',
@@ -121,13 +121,13 @@ const styles = {
     minWidth: 0,
     display: 'flex',
     flexDirection: 'column',
-    gap: '4px',
+    gap: '6px',
   },
   cardLabel: {
     margin: 0,
     color: COLOR_PRIMARY,
     fontFamily: FONT_HEADING,
-    fontSize: 'clamp(20px, 2.2vw, 22px)',
+    fontSize: 'clamp(17px, 1.8vw, 19px)',
     fontWeight: 500,
     lineHeight: 1.15,
     cursor: 'pointer',
@@ -142,10 +142,10 @@ const styles = {
   valuePill: {
     background: COLOR_PRIMARY,
     borderRadius: '999px',
-    padding: '8px 14px',
+    padding: '10px 16px',
     color: 'white',
     fontFamily: FONT_BODY,
-    fontSize: '14px',
+    fontSize: '15px',
     fontWeight: 700,
     lineHeight: 1,
     whiteSpace: 'nowrap',
@@ -156,13 +156,13 @@ const styles = {
     marginLeft: 'auto',
   },
   sliderArea: {
-    marginTop: '16px',
+    marginTop: '12px',
   },
   input: {
     WebkitAppearance: 'none',
     appearance: 'none',
     width: '100%',
-    height: '4px',
+    height: '5px',
     borderRadius: '999px',
     outline: 'none',
     cursor: 'pointer',
@@ -172,7 +172,7 @@ const styles = {
   labelsRow: {
     display: 'flex',
     justifyContent: 'space-between',
-    marginTop: '8px',
+    marginTop: '12px',
   },
   trackLabel: {
     fontFamily: FONT_BODY,

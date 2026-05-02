@@ -81,6 +81,7 @@ export function calculate(inputs, sliderOverrides = {}) {
     0,
     resolvedInputs.income - (resolvedInputs.monthlySavings * MONTHS_PER_YEAR),
   );
+  const annualSavings = resolvedInputs.monthlySavings * MONTHS_PER_YEAR;
 
   const yearsToRetirement =
     resolvedInputs.targetRetirementAge - resolvedInputs.currentAge;
@@ -102,6 +103,10 @@ export function calculate(inputs, sliderOverrides = {}) {
 
   if (gap <= 0) {
     return {
+      annualExpenses,
+      annualSavings,
+      annualReturnRate: ANNUAL_RETURN_RATE,
+      retirementMultiple: RETIREMENT_MULTIPLE,
       retirementTarget,
       futureValueCurrentSavings,
       futureValueMonthlyContributions,
@@ -117,6 +122,10 @@ export function calculate(inputs, sliderOverrides = {}) {
   const additionalMonthlySavingsNeeded = gap / contributionGrowthFactor;
 
   return {
+    annualExpenses,
+    annualSavings,
+    annualReturnRate: ANNUAL_RETURN_RATE,
+    retirementMultiple: RETIREMENT_MULTIPLE,
     retirementTarget,
     futureValueCurrentSavings,
     futureValueMonthlyContributions,
